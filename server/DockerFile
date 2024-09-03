@@ -17,7 +17,7 @@ COPY . .
 RUN npx prisma generate
 
 # Execute as migrações ao iniciar o contêiner
-CMD ["npx", "prisma", "migrate", "deploy", "--skip-seed", "&&", "npm", "run", "start"]
+CMD ["npx", "prisma", "migrate", "deploy", "--skip-seed", "&&", "npm", "run", "dev"]
 
 # Exponha a porta que o backend vai usar
 EXPOSE 3333

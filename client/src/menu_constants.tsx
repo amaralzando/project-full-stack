@@ -1,17 +1,56 @@
 import { SideNavItemGroup } from "@/src/type";
-import { BsGear, BsHouseDoor, BsQuestionCircle } from "react-icons/bs";
+import {
+  BsEnvelope,
+  BsGear,
+  BsHouseDoor,
+  BsKanban,
+  BsListUl,
+  BsQuestionCircle,
+} from "react-icons/bs";
 
 export const SIDENAV_ITEMS: SideNavItemGroup[] = [
   {
     show: true,
-    title: "View",
+    title: "Dashboards",
     menuList: [
       {
         show: true,
-        title: "Chat",
-        path: "/chat",
+        title: "Dashboard",
+        path: "/dashboard",
         protected: true,
         icon: <BsHouseDoor size={20} />,
+      },
+    ],
+  },
+  {
+    show: true,
+    title: "Manage",
+    roles: ["ADMIN"],
+    menuList: [
+      {
+        show: true,
+        title: "Products",
+        path: "/products",
+        icon: <BsKanban size={20} />,
+        submenu: true,
+        subMenuItems: [
+          { show: true, title: "All", path: "/products", protected: true },
+          { show: true, title: "New", path: "/products/new", protected: true },
+        ],
+      },
+      {
+        show: true,
+        title: "Orders",
+        path: "/orders",
+        protected: true,
+        icon: <BsListUl size={20} />,
+      },
+      {
+        show: true,
+        title: "Feedbacks",
+        path: "/feedbacks",
+        protected: true,
+        icon: <BsEnvelope size={20} />,
       },
     ],
   },

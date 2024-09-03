@@ -29,24 +29,18 @@ import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string().min(5, {
-    message: "O Nome deve ter pelo menos 5 caracteres.",
+    message: "O nome deve ter pelo menos 5 caracteres.",
   }),
-  email: z
-    .string()
-    .email({
-      message:
-        "O e-mail deve ser um endereço válido (ex: usuario@exemplo.com).",
-    })
-    .min(2, {
-      message: "O e-mail deve ter pelo menos 2 caracteres.",
-    }),
+  email: z.string().email({
+    message: "O e-mail deve ser um endereço válido (ex: usuario@exemplo.com).",
+  }),
   password: z.string().refine((val) => val.length >= 8 && /[A-Z]/.test(val), {
     message:
       "A senha deve ter pelo menos 8 caracteres e conter pelo menos uma letra maiúscula.",
   }),
 });
 
-export default function Login() {
+export default function Register() {
   const { signUp } = useContext(AuthContext);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -62,14 +56,18 @@ export default function Login() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    await signUp(data)
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setISError(error);
-      });
+    try {
+      setIsLoading(true);
+      await signUp(data);
+      setIsLoading(false);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error(error.issues);
+      }
+      if (error instanceof Error) {
+        setISError(error.message);
+      }
+    }
   }
 
   return (
@@ -77,9 +75,9 @@ export default function Login() {
       <div className="w-full m-auto sm:max-w-lg px-4">
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Conectar-se</CardTitle>
+            <CardTitle className="text-2xl text-center">Cadastre-se</CardTitle>
             <CardDescription className="text-center">
-              Entre com seu email e senha!
+              Coleque seu nome, email e senha!
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -90,13 +88,30 @@ export default function Login() {
               >
                 <FormField
                   control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Difite seu Nome"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>E-mail</FormLabel>
                       <FormControl>
                         <Input
-                          type="email"
+                          type="text"
                           placeholder="Difite seu email"
                           {...field}
                         />
@@ -132,7 +147,7 @@ export default function Login() {
                       <Progressbar />
                     </div>
                   ) : (
-                    "Logar"
+                    "Cadastrar"
                   )}
                 </Button>
                 {isError && (
@@ -144,16 +159,9 @@ export default function Login() {
             </Form>
           </CardContent>
           <CardFooter className="flex flex-col">
-            {/* <p className="mt-2 text-xs text-center text-gray-700">
+            <p className="mt-2 text-xs text-center text-sidebar-foreground">
               {" "}
-              Esqueceu sua senha?{" "}
-              <Link href="/register" className="text-blue-600 hover:underline">
-                Redefinir senha
-              </Link>
-            </p> */}
-            <p className="mt-2 text-xs text-center text-gray-700">
-              {" "}
-              Não possui uma conta?{" "}
+              Já tenho uma conta?{" "}
               <Link href="/register" className="text-blue-600 hover:underline">
                 Sign up
               </Link>

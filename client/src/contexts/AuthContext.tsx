@@ -52,7 +52,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!user;
 
   useEffect(() => {
-    const { "gasachat.token": token } = parseCookies();
+    const { "projectfullstack.token": token } = parseCookies();
     if (token) {
       api.get("/me").then((resp) => {
         setUser(resp.data);
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       .then((resp) => {
         const user = resp.data;
 
-        setCookie(undefined, "gasachat.token", user.token, {
+        setCookie(undefined, "projectfullstack.token", user.token, {
           maxAge: 60 * 60 * 24, // 1 day
         });
 
@@ -90,7 +90,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       .then((resp) => {
         const user = resp.data;
 
-        setCookie(undefined, "gasachat.token", user.token, {
+        setCookie(undefined, "projectfullstack.token", user.token, {
           maxAge: 60 * 60 * 24, // 1 day
         });
 
@@ -109,7 +109,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function logOut() {
-    destroyCookie(undefined, "gasachat.token");
+    destroyCookie(undefined, "projectfullstack.token");
 
     console.log("Logged out. Redirecting");
     router.push("/");

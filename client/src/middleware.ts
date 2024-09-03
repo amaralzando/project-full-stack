@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
   // Make middleware async
   const cookieStore = cookies();
-  const tokenCookie = cookieStore.get("gasachat.token")?.value;
+  const tokenCookie = cookieStore.get("projectfullstack.token")?.value;
 
   // Extract protected paths from SIDENAV_ITEMS
   const protectedPaths = SIDENAV_ITEMS.flatMap((group) =>
